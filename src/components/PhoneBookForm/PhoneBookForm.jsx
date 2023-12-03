@@ -9,29 +9,32 @@ import {
   ButtonForm,
   ErrorMsg,
 } from './PhoneBookForm.styled';
-import { addContact } from '../../redux/fetchAPI';
-import { selectContacts } from '../../redux/selectors';
+import { addContact } from '../../redux/contacts/contOperations';
+import { selectContacts } from '../../redux/contacts/contSelectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { nanoid } from '@reduxjs/toolkit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const PhoneBookSchema = Yup.object().shape({
+const formSchema = Yup.object().shape({
   name: Yup.string()
-    .min(6, 'Too short!')
-    .max(9, 'Too long!')
-    .required('This field is required!'),
+    .matches(/^[a-zA-Z\s]+$/, 'Only letters are allowed')
+    .min(3, 'Too Short!')
+    .required('This field is required, please fill it'),
+    number: Yup.string()
+    .matches(/^\d{3}-\d{3}-\d{4}$/, 'Must be in format: 000-000-0000')
+    .required('This field is required, please fill it'),
 });
 
-const PhoneBookForm = () => {
+const FormContact = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
 
-  const handleSubmit = ({ name, phone }, { resetForm }) => {
+  const handleSubmit = ({ name, number }, { resetForm }) => {
     const finalContact = {
       id: nanoid(),
       name: name,
-      phone: phone,
+      number: number,
     };
   
     const identContactName = contacts.find(contact => contact.name === name);
@@ -39,7 +42,7 @@ const PhoneBookForm = () => {
     if (identContactName) {
       return toast.info(`is already in contacts`, 'ok');
     }
-    console.log(name, phone);
+    
     dispatch(addContact(finalContact));
     resetForm();
   };
@@ -49,9 +52,9 @@ const PhoneBookForm = () => {
       <Formik
         initialValues={{
           name: '',
-          phone: '',
+          number: '',
         }}
-        validationSchema={PhoneBookSchema}
+        validationSchema={formSchema}
         onSubmit={handleSubmit}
       >
         <MyForm>
@@ -62,9 +65,9 @@ const PhoneBookForm = () => {
           </InputContainer>
 
           <InputContainer>
-            <Label htmlFor="phone">Number</Label>
-            <MyField type="tel" name="phone" placeholder="" />
-            <ErrorMsg name="phone" component="div" />
+            <Label htmlFor="number">Number</Label>
+            <MyField type="tel" name="number" placeholder="" />
+            <ErrorMsg name="number" component="div" />
           </InputContainer>
           <ButtonForm type="submit">Add contact</ButtonForm>
         </MyForm>
@@ -73,4 +76,4 @@ const PhoneBookForm = () => {
     </>
   );
 };
-export default PhoneBookForm;
+export default FormContact;

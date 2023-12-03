@@ -1,15 +1,15 @@
 import React from 'react';
+import { deleteContact } from '../../redux/contacts/contOperations';
+import { useDispatch } from 'react-redux';
 import {
   ItemEl,
   ContactData,
   ContactName,
   ContactNumber,
   ContactDelete,
-} from './Contacts.styled';
-import { deleteContact } from '../../redux/fetchAPI';
-import { useDispatch } from 'react-redux';
+} from './ContactItem.styled';
 
-export const ContactItem = ({contact: { name, phone, id }}) => {
+export const ContactItem = ({contact: { name, number, id }}) => {
   
   const dispatch = useDispatch();
 
@@ -17,7 +17,7 @@ export const ContactItem = ({contact: { name, phone, id }}) => {
     <ItemEl>
       <ContactData>
         <ContactName>{name}</ContactName>
-        <ContactNumber>{phone}</ContactNumber>
+        <ContactNumber>{number}</ContactNumber>
       </ContactData>
       <ContactDelete type="button" onClick={() => dispatch(deleteContact(id))}>
         &times;
