@@ -8,7 +8,7 @@ import { refreshUser } from '../../redux/auth/operation';
 import { useAuth } from '../../hooks/useAuth';
 import { Title } from "./App.styled";
 
-const HomePage = lazy(() => import('../../pages/Home'));
+const HomePage = lazy(() => import('../../pages/Home/Home'));
 const RegisterPage = lazy(() => import('../../pages/Register'));
 const LoginPage = lazy(() => import('../../pages/Login'));
 const ContactsPage = lazy(() => import('../../pages/Contacts'));
@@ -24,7 +24,6 @@ export const App = () => {
   return isRefreshing ? (
     <b>Refreshing user...</b>
   ) : (
-    <Title>
        <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
@@ -49,7 +48,5 @@ export const App = () => {
       </Route>
       <Route path="*" element={<HomePage />} />
     </Routes>
-    </Title>
- 
   );
 };
