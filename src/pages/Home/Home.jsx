@@ -1,5 +1,5 @@
 
-import {  Wrapper, Title } from "../Home.styled";
+import {  Wrapper, Title } from "./Home.styled";
 
   export default function Home() {
     return (
